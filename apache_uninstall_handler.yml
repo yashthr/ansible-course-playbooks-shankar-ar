@@ -1,0 +1,17 @@
+---
+- name: using notify and handler to uni httpd
+  hosts: webserver
+  become: True
+  
+  tasks:
+  - name: stopping service first
+    service:
+     name: httpd
+     state: stopped
+    notify: removing package
+
+  handlers: 
+  - name: removing package
+    yum:
+     name: httpd
+     state: absent

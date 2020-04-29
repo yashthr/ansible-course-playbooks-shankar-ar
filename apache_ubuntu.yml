@@ -1,0 +1,15 @@
+---
+- name: Playbook to Install Apache on Ubuntu
+  become: True
+  hosts: dbserver
+
+  tasks:
+  - name: Installing Apache2 package via apt module
+    apt:
+     name: apache2
+     state: present
+
+  - name: Starting the apache2 service
+    service: 
+     name: apache2 
+     state: started

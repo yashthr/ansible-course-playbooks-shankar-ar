@@ -1,0 +1,13 @@
+---
+- name: Copying a file from local system to remote
+  hosts: webserver
+  become: True
+
+  tasks:
+  - name: Copying the data
+    copy:
+     src: /yash.txt
+     dest: /home/ansadmin/yash.txt
+     owner: ansadmin
+     group: ansadmin
+     mode: '0644'

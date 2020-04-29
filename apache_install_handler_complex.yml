@@ -1,0 +1,68 @@
+---
+- name: this playbook install httpd
+  hosts: all
+  become: true
+  vars:
+   port: 82
+
+  tasks:
+  - name: install package
+    yum:
+     name: httpd
+     state: installed
+    when: ansible_os_family == "RedHat"
+    notify: start apache 
+
+  - name: install apache2      
+    apt:  
+     name: apache2
+     state: present
+    when: ansible_os_family == "Debian"
+    notify: start apache2
+
+  - name: copy index.html
+    copy:
+     src: /home/ansadmin/playbooks/index.html
+     dest: /var/www/html
+     mode: 0666
+
+
+  - name: Editing the port to 81 on RedHat
+    lineinfile:
+     path: /etc/httpd/conf/httpd.conf
+     regexp: '^Listen '
+     insertafter: '#Listen 80 '
+     line: Listen {{port}}
+    notify: restart apache
+    when: ansible_os_family == "RedHat"
+
+   
+  - name: Editing the port to 81 on Ubuntu
+    lineinfile:
+     path: /etc/apache2/ports.conf
+     regexp: '^#Listen '
+     insertafter: '^# /etc/apache2/sites-enabled/000-default.conf'
+     line: Listen {{port}}
+    notify: restart apache2
+    when: ansible_os_family == "Debian"
+
+  handlers:
+  - name: start apache
+    service:
+     name: httpd
+     state: started
+
+  - name: start apache2
+    service:
+     name: apache2
+     state: started
+
+  - name: restart apache
+    service:
+     name: httpd
+     state: restarted
+
+  - name: restart apache2
+    service:
+     name: apache2
+     state: restarted

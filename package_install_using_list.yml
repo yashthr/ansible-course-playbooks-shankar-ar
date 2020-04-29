@@ -1,0 +1,10 @@
+---
+- name: Installing multiple packages with list
+  hosts: webserver
+  become: True
+
+  tasks:
+  - name: Installing via Yum and list to store package names
+    yum:
+     name: ["git","wget","telnet","unzip"]
+     state: latest

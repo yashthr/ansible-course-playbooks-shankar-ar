@@ -1,0 +1,46 @@
+# github link for steps https://github.com/yankils/ansible/blob/master/tomcat_installation.md
+
+---
+- name: Installing Tomcat using shell commands
+  hosts: all
+  become: True
+  gather_facts:  yes
+
+  tasks:
+  - name: Install Java on RedHat
+    yum:
+     name: java
+     state: installed
+    when: ansible_os_family == "RedHat"
+
+  - name: Install Java on Ubuntu
+    apt:
+     name: default-jdk
+     state: present
+    when: ansible_os_family == "Debian"
+
+
+  - name: Download Tomcat Packages
+    get_url:
+     url: https://mirrors.estointernet.in/apache/tomcat/tomcat-9/v9.0.34/bin/apache-tomcat-9.0.34.tar.gz
+     dest: /opt
+  
+  - name: Untar the tomcat tar file 
+    unarchive:
+     src: /opt/apache-tomcat-9.0.34.tar.gz
+     dest: /opt
+     remote_src: yes
+
+  - name: Add execution persmission on the startup.sh file
+    file:
+     path: /opt/apache-tomcat-9.0.34/bin/startup.sh
+     owner: ansadmin
+     group: ansadmin
+     mode: '0777'
+
+  # Now start the tomcat service, but here we are using script so service module will not work but shell module for script starting
+
+  - name: Starting Tomcat Service # https://docs.ansible.com/ansible/latest/modules/shell_module.html
+    shell: nohup ./startup.sh #nohup used to script background ma continous run ek varr ma bandh nai
+    args:
+     chdir: /opt/apache-tomcat-9.0.34/bin

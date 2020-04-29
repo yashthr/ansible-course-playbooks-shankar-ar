@@ -1,0 +1,15 @@
+---
+- name: Writing playbook for Ansible
+  hosts: webserver
+  become: True
+  gather_facts: no
+
+  tasks:
+  - name: Copying a file from localsystem to another and using no gathering facts
+    #gathering facts gathers info of hosts example like ansible setup command
+    copy:
+     src: /home/ansadmin/playbooks/yash
+     dest: /home/ansadmin
+     owner: ansadmin
+     group: ansadmin
+     mode: '0644'

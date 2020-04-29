@@ -1,0 +1,16 @@
+---
+- name: Uninstalling Apache2 
+  become: True
+  hosts: dbserver
+
+  tasks:
+  - name: Stopping the service first than removing
+    service:
+     name: apache2
+     state: stopped
+
+  - name: Removing the apache2 service
+    apt:
+     name: apache2
+     state: absent
+

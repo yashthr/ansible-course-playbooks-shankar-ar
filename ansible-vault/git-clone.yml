@@ -1,0 +1,12 @@
+---
+- name: Playbook to create Git Clone of a Private Repo
+  hosts: webserver
+  become: True
+  vars_files:
+   - pwdfile.yml
+ 
+  tasks:
+  - name: Cloning the Private Repo
+    git:
+     repo: https://yashthr:{{password}}@github.com/yashthr/ansible-learning.git 
+     dest: /home/ansadmin/gitclone

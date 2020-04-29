@@ -1,0 +1,11 @@
+---
+- name: This Playbook is to Create A User 
+  hosts: all
+  become: true
+  vars:
+   user: abcd
+  tasks:
+  - name: Creating A User
+    user: 
+     name: "{{user}}"
+            

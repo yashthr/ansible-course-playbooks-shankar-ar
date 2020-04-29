@@ -1,0 +1,5 @@
+[webserver]
+redhat 	ansible_host=10.0.1.230
+
+[dbserver]
+ubuntu 	ansible_host=10.0.1.43

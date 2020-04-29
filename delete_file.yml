@@ -1,0 +1,18 @@
+---
+- name: Playbook to use File Module to create file and directory
+  hosts: all
+  become: True (if become commented you can add -b after executing ansible-playbook)
+  gather_facts: no
+
+  tasks:
+  - name: Creating File
+    file: 
+     path: /home/ansadmin/firstfile
+     state: absent #absent if you want to remove the file
+     mode: u+rw,g-wx,o-rwx
+
+     #  tasks:
+     #- name: Creating Directory
+     #file: 
+     #path: /home/ansadmin/firstdir
+     #state: directory

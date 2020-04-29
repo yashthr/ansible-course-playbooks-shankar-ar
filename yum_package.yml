@@ -1,0 +1,10 @@
+---
+- name: This Playbook is used to install Yum = Git Package
+  hosts: webserver
+  #become: False
+  tasks:
+  - name: Installing Tree Package
+    yum: 
+     name: tree
+     state: latest
+

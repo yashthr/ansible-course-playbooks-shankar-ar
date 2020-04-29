@@ -1,0 +1,16 @@
+---
+- name: Uninstalling Apache 
+  become: True
+  hosts: webserver
+
+  tasks:
+  - name: Stopping the service first than removing
+    service:
+     name: httpd
+     state: stopped
+
+  - name: Removing the httpd service
+    yum:
+     name: httpd
+     state: removed
+

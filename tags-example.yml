@@ -1,0 +1,54 @@
+---
+- name: Installing Apache on all systems based on when conditon if it belongs to particular family
+  hosts: all
+  become: True
+  gather_facts: yes
+
+  tasks:
+  - name: Installing on RHEL
+    yum:
+     name: httpd
+     state: installed
+    when: ansible_os_family == "RedHat"
+    tags: install-apache
+
+  - name: Starting the service   
+    service:
+     name: httpd
+     state: started
+    when: ansible_os_family == "RedHat"   
+    tags: start-service
+
+  - name: Copying custom index.html to remote host
+    copy:
+     src: /home/ansadmin/playbooks/index.html
+     dest: /var/www/html/index.html
+     owner: ansadmin
+     group: ansadmin
+     mode: '0777'
+    when: ansible_os_family == "RedHat"
+    tags: copy-file
+
+  - name: Installing Apache2 on Ubuntu
+    apt:
+     name: apache2
+     state: present
+    when: ansible_os_family == "Debian"
+    tags: install-apache
+
+  - name: Starting the apache2 service
+    service:
+     name: apache2
+     state: started
+    when: ansible_os_family == "Debian"
+    tags: start-service
+
+  - name: Copying custom index.html to remote host
+    copy:
+     src: /home/ansadmin/playbooks/index.html
+     dest: /var/www/html/index.html
+     owner: ansadmin
+     group: ansadmin
+     mode: '0777'
+    when: ansible_os_family == "Debian"
+    tags: copy-file

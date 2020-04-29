@@ -1,0 +1,32 @@
+---
+- name: Using When condition to remove the packages
+  hosts: all
+  become: True
+  gather_facts: yes
+
+ 
+  tasks:
+  - name: First Stopping Redhat Service
+    service:
+     name: httpd
+     state: stopped
+    when: ansible_os_family == "RedHat"
+
+  - name: Removing the packages using Yum  
+    yum:
+     name: httpd
+     state: absent
+    when: ansible_os_family == "RedHat"
+
+
+  - name: First Stopping Ubuntu apache2 service
+    service:
+     name: apache2
+     state: stopped
+    when: ansible_os_family == "Debian"
+
+  - name: Removing the packages using Apt
+    apt:
+     name: apache2
+     state: absent
+    when: ansible_os_family == "Debian"

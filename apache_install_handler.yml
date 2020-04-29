@@ -1,0 +1,17 @@
+---
+- name: Installing Apache 
+  become: True
+  hosts: webserver
+
+  tasks:
+  - name: Installing Httpd using yum module
+    yum:
+     name: httpd
+     state: installed
+    notify: Starting the service  #notify handler atle uper no task run thay toh handler run thay
+
+  handlers: 
+  - name: Starting the service   #notify name and the service je pachi start karvi hoy aenu name same see here
+    service:
+     name: httpd
+     state: started
